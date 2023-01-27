@@ -1,24 +1,17 @@
-package main
+package Api
 
 import (
+	"XaocBotWebControl/Connectors"
 	"github.com/gofiber/fiber/v2"
-	"log"
 	"strconv"
 )
 
-func configWebServer(cn Connector) {
-	app := fiber.New()
-
+func Account(app *fiber.App, cn Connectors.Connector) {
 	api := app.Group("/api")
+	api.Use(func(c *fiber.Ctx) error {
 
-	api.Get("/account", func(c *fiber.Ctx) error {
-		AccountList, ok := cn.GetAccountList()
-		if !ok {
-			return fiber.NewError(fiber.StatusBadGateway)
-		}
-		return c.JSON(AccountList)
+		return c.Next()
 	})
-
 	api.Get("/account/:accountID", func(c *fiber.Ctx) error {
 
 		ids := c.Params("accountID")
@@ -45,7 +38,7 @@ func configWebServer(cn Connector) {
 			return fiber.NewError(fiber.StatusBadGateway)
 		}
 
-		var account = waccount{}
+		var account = Connectors.Waccount{}
 		account_, ok := cn.GetAccountInformation(id)
 
 		if !ok {
@@ -68,9 +61,13 @@ func configWebServer(cn Connector) {
 		cn.SetAccountInformation(id, account_)
 		return c.JSON(account_)
 	})
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Redirect("/controlPanel.html")
+
+	api.Get("/account", func(c *fiber.Ctx) error {
+		AccountList, ok := cn.GetAccountList()
+		if !ok {
+			return fiber.NewError(fiber.StatusBadGateway)
+		}
+		return c.JSON(AccountList)
 	})
-	app.Static("/", "./static")
-	log.Println(app.Listen(":3000"))
+
 }

@@ -1,25 +1,20 @@
 package main
 
 import (
-	"github.com/xaosBotTeam/go-shared-models/apiAccountInformation"
-	"github.com/xaosBotTeam/go-shared-models/dbAccountInformation"
+	"XaocBotWebControl/Api"
+	"XaocBotWebControl/Connectors"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
+	"log"
 )
 
-type waccount struct {
-	apiAccountInformation.ApiAccountInformation
-	dbAccountInformation.DbAccountInformation
-}
-
-type Connector interface {
-	Authorization(login string, password string) bool
-	//GetUserInformation(ID int)
-	GetAccountList() ([]waccount, bool)
-	GetAccountInformation(ID int) (waccount, bool)
-
-	SetAccountInformation(ID int, account waccount) bool
-}
-
 func main() {
-	var cn Connector = testDriver{}
-	configWebServer(cn)
+	var cn Connectors.Connector = Connectors.TestDriver{}
+	app := fiber.New()
+	store := session.New()
+	Api.Account(app, cn)
+	Api.Auth(app, store, cn)
+
+	app.Static("/", "./static")
+	log.Println(app.Listen(":3000"))
 }
