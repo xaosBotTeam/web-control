@@ -2,7 +2,7 @@ module web-control/connectors
 
 go 1.18
 
-require github.com/xaosBotTeam/go-shared-models v1.0.0
+require github.com/xaosBotTeam/go-shared-models v1.1.0
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
