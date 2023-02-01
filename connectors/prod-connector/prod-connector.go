@@ -65,7 +65,7 @@ func (connector ProdConnector) SetAccountInformation(ID int, account connectors.
 		if err != nil {
 			return false
 		}
-		queue := sending_queue.Queue_{Url: config_control_panel.Configuration.URL_GO_BOT + "/config/" + strconv.Itoa(ID), Methods: "PUT", Value: b}
+		queue := sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/config/" + strconv.Itoa(ID), Methods: "PUT", Value: b}
 		sending_queue.Channel <- queue
 		return true
 	}
@@ -78,9 +78,9 @@ func (connector ProdConnector) CreateAccount(url string) {
 		return
 	}
 
-	queue := sending_queue.Queue_{Url: config_control_panel.Configuration.URL_GO_BOT + "/account/", Methods: "POST", Value: b}
+	queue := sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/account/", Methods: "POST", Value: b}
 	sending_queue.Channel <- queue
 
-	queue = sending_queue.Queue_{Url: config_control_panel.Configuration.URL_GO_BOT + "/refresh/", Methods: "PATCH", Value: nil}
+	queue = sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/refresh/", Methods: "PATCH", Value: nil}
 	sending_queue.Channel <- queue
 }

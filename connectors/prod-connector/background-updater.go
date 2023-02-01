@@ -33,7 +33,7 @@ func parser(body []byte) (string, bool) {
 }
 
 func updateAccountStatus() (map[string]status.Status, bool) {
-	resp, err := http.Get(config_control_panel.Configuration.URL_GO_BOT + "/status")
+	resp, err := http.Get(config_control_panel.Configuration.GO_BOT_URL + "/status")
 	if err != nil {
 		log.Println(err)
 		return nil, true
@@ -61,7 +61,7 @@ func updateAccountStatus() (map[string]status.Status, bool) {
 }
 
 func updateAccountInformation() (map[string]account.Account, bool) {
-	resp, err := http.Get(config_control_panel.Configuration.URL_GO_BOT + "/account")
+	resp, err := http.Get(config_control_panel.Configuration.GO_BOT_URL + "/account")
 	if err != nil {
 		log.Println(err)
 		return nil, true
@@ -89,7 +89,7 @@ func updateAccountInformation() (map[string]account.Account, bool) {
 }
 
 func updateAccountConfig() (map[string]config.Config, bool) {
-	resp, err := http.Get(config_control_panel.Configuration.URL_GO_BOT + "/config")
+	resp, err := http.Get(config_control_panel.Configuration.GO_BOT_URL + "/config")
 	if err != nil {
 		log.Println(err)
 		return nil, true
