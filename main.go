@@ -1,12 +1,12 @@
 package main
 
 import (
-	"XaocBotWebControl/api"
-	"XaocBotWebControl/connectors"
-	prod_connector "XaocBotWebControl/connectors/prod-connector"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 	"log"
+	"web-control/connectors/api"
+	"web-control/connectors/connectors"
+	prod_connector "web-control/connectors/connectors/prod-connector"
 )
 
 func main() {

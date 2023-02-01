@@ -1,9 +1,9 @@
 package api
 
 import (
-	"XaocBotWebControl/connectors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
+	"web-control/connectors/connectors"
 )
 
 func doAuth(c *fiber.Ctx, cn connectors.Connector) bool {

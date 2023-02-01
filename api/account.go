@@ -1,11 +1,11 @@
 package api
 
 import (
-	"XaocBotWebControl/connectors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/xaosBotTeam/go-shared-models/config"
 	"net/http"
 	"strconv"
+	"web-control/connectors/connectors"
 )
 
 func Account(app *fiber.App, cn connectors.Connector) {

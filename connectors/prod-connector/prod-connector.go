@@ -1,14 +1,14 @@
 package prod_connector
 
 import (
-	"XaocBotWebControl/config-control-panel"
-	"XaocBotWebControl/connectors"
-	"XaocBotWebControl/connectors/prod-connector/sending-queue"
 	"encoding/json"
 	"github.com/xaosBotTeam/go-shared-models/account"
 	"github.com/xaosBotTeam/go-shared-models/config"
 	"strconv"
 	"sync"
+	config_control_panel "web-control/connectors/config-control-panel"
+	"web-control/connectors/connectors"
+	sending_queue "web-control/connectors/connectors/prod-connector/sending-queue"
 )
 
 type ProdConnector struct {

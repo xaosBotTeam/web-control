@@ -1,8 +1,6 @@
 package prod_connector
 
 import (
-	"XaocBotWebControl/config-control-panel"
-	"XaocBotWebControl/connectors"
 	"encoding/json"
 	"github.com/xaosBotTeam/go-shared-models/account"
 	"github.com/xaosBotTeam/go-shared-models/config"
@@ -12,6 +10,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+	config_control_panel "web-control/connectors/config-control-panel"
+	"web-control/connectors/connectors"
 )
 
 func parser(body []byte) (string, bool) {
