@@ -1,13 +1,13 @@
-package Api
+package api
 
 import (
-	"XaocBotWebControl/Connectors"
+	"XaocBotWebControl/connectors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
 )
 
-func doAuth(c *fiber.Ctx, cn Connectors.Connector) bool {
-	var credential = Connectors.Сredentials{}
+func doAuth(c *fiber.Ctx, cn connectors.Connector) bool {
+	var credential = connectors.Сredentials{}
 
 	if err := c.BodyParser(&credential); err != nil {
 		return false
@@ -29,7 +29,8 @@ func CheckCoockes(store *session.Store, c *fiber.Ctx) bool {
 	return true
 }
 
-func Auth(app *fiber.App, store *session.Store, cn Connectors.Connector) {
+func Auth(app *fiber.App, store *session.Store, cn connectors.Connector) {
+
 	app.Post("/auth", func(c *fiber.Ctx) error {
 		if !doAuth(c, cn) {
 			return fiber.NewError(fiber.StatusForbidden)
