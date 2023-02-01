@@ -61,7 +61,7 @@ func (connector ProdConnector) SetAccountInformation(ID int, account connectors.
 	accountStorage.Lock()
 	defer accountStorage.Unlock()
 	if _, ok := accountStorage.accountMap[ID]; ok {
-		b, err := json.Marshal(config.Config{ArenaFarming: account.ArenaFarming, ArenaUseEnergyCans: account.ArenaUseEnergyCans})
+		b, err := json.Marshal(config.Config{ArenaFarming: account.ArenaFarming, ArenaUseEnergyCans: account.ArenaUseEnergyCans, Travelling: account.Travelling})
 		if err != nil {
 			return false
 		}

@@ -53,6 +53,7 @@ func Account(app *fiber.App, cn connectors.Connector) {
 
 		account_.ArenaFarming = config.ArenaFarming
 		account_.ArenaUseEnergyCans = config.ArenaUseEnergyCans
+		account_.Travelling = config.Travelling
 
 		cn.SetAccountInformation(id, account_)
 		return c.JSON(account_)

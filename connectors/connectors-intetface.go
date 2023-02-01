@@ -20,6 +20,7 @@ func (wacc *Waccount) AddAccount(acc account.Account) {
 func (wacc *Waccount) AddConfig(conf config.Config) {
 	wacc.ArenaUseEnergyCans = conf.ArenaUseEnergyCans
 	wacc.ArenaFarming = conf.ArenaFarming
+	wacc.Travelling = conf.Travelling
 }
 
 func (wacc *Waccount) AddStatus(status status.Status) {
