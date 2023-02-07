@@ -11,7 +11,7 @@ func User(app *fiber.App, store *session.Store, cn connectors.Connector) {
 
 	app.Post("/resetPassword", func(c *fiber.Ctx) error {
 		type newPassword struct {
-			password string
+			Password string
 		}
 		var pass = newPassword{}
 		c.BodyParser(&pass)
@@ -28,7 +28,7 @@ func User(app *fiber.App, store *session.Store, cn connectors.Connector) {
 			return c.Status(http.StatusBadRequest).JSON("Can not find user ID")
 		}
 
-		if !cn.ResetUserPassword(ID, pass.password) {
+		if !cn.ResetUserPassword(ID, pass.Password) {
 			return c.Status(http.StatusBadRequest).JSON("Database error")
 		}
 		return c.JSON("ok")
