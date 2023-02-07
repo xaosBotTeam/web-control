@@ -8,6 +8,7 @@ import (
 	"sync"
 	config_control_panel "web-control/connectors/config-control-panel"
 	"web-control/connectors/connectors"
+	"web-control/connectors/connectors/prod-connector/postgres-connector"
 	sending_queue "web-control/connectors/connectors/prod-connector/sending-queue"
 )
 
@@ -15,7 +16,6 @@ type ProdConnector struct {
 }
 
 var accountStorage AccountStorage
-var userList map[string]string
 
 type AccountStorage struct {
 	accountMap map[int]connectors.Waccount
@@ -24,21 +24,12 @@ type AccountStorage struct {
 
 func init() {
 	accountStorage.accountMap = make(map[int]connectors.Waccount)
-
-	userList = make(map[string]string)
-	userList["admin"] = "admin1234"
-
 	go backgroundUpdater()
 }
 
-func (connector ProdConnector) Authorization(credential connectors.Сredentials) bool {
-	if pass, ok := userList[credential.Login]; ok {
-		if pass == credential.Password {
-			return true
-		}
-	}
-
-	return true
+func (connector ProdConnector) Authorization(credential connectors.Сredentials) (int, bool) {
+	id, resp := postgres_connector.AuthUser(credential.Login, credential.Password)
+	return id, resp
 }
 
 func (connector ProdConnector) GetAccountAllInformation() (map[int]connectors.Waccount, bool) {
@@ -83,4 +74,8 @@ func (connector ProdConnector) CreateAccount(url string) {
 
 	queue = sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/refresh/", Methods: "PATCH", Value: nil}
 	sending_queue.Channel <- queue
+}
+
+func (connector ProdConnector) ResetUserPassword(ID int, password string) bool {
+	return postgres_connector.ChangePassword(ID, password)
 }

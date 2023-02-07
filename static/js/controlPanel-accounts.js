@@ -34,7 +34,7 @@ Vue.component('account-item', {
         '               <div>game_id - {{account.game_id}}</div>' +
         '               <div>energy_limit - {{account.energy_limit}}</div>' +
         '            </details>'+
-        '       <button class="btn btn-primary">Submit</button>'+
+        '       <button class="btn btn-primary">Применить</button>'+
         '   </form>'+
         '</div>'
 })
@@ -63,7 +63,11 @@ var accountList = new Vue({
                         this.accountList = response.data
                         originalAccountList1 = _.cloneDeep(response.data)
                     }
-                });
+                })
+                .catch(error => {if(error.response.status==403){
+                    window.location.href = "sign-in.js.html"
+                }
+                console.log(error)});;
         }, 2000)
     },
 })

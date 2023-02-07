@@ -35,15 +35,13 @@ type Сredentials struct {
 }
 
 type Connector interface {
-	Authorization(credential Сredentials) bool
-	//GetUserInformation(ID int)
+	Authorization(credential Сredentials) (int, bool)
 
 	GetAccountAllInformation() (map[int]Waccount, bool)
 	GetAccountInformation(ID int) (Waccount, bool)
 
-	//GetAccountsTask() []task.Status
-	//GetAccountTask(ID int) task.Status
-
 	SetAccountInformation(ID int, account Waccount) bool
 	CreateAccount(url string)
+
+	ResetUserPassword(ID int, password string) bool
 }

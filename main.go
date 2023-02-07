@@ -15,8 +15,9 @@ func main() {
 
 	app := fiber.New()
 	store := session.New()
-	api.Account(app, cn)
+	api.Account(app, store, cn)
 	api.Auth(app, store, cn)
+	api.User(app, store, cn)
 
 	app.Static("/", "./static")
 	log.Println(app.Listen(":3000"))

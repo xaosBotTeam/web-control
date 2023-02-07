@@ -2,17 +2,20 @@ package api
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/xaosBotTeam/go-shared-models/config"
 	"net/http"
 	"strconv"
 	"web-control/connectors/connectors"
 )
 
-func Account(app *fiber.App, cn connectors.Connector) {
+func Account(app *fiber.App, store *session.Store, cn connectors.Connector) {
 	api := app.Group("/api")
 	api.Use(func(c *fiber.Ctx) error {
-
-		return c.Next()
+		if CheckCoockes(store, c) {
+			return c.Next()
+		}
+		return c.Status(http.StatusForbidden).JSON("Can't parse account id")
 	})
 
 	api.Get("/account/:accountID", func(c *fiber.Ctx) error {

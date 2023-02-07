@@ -3,12 +3,12 @@ var sign_in = new Vue({
     data() {
         return {
             login:'',
-            password: ''
+            password: '',
+            err_msg:''
         }
     },
     methods: {
         formSubmit(e) {
-            console.log(this)
             e.preventDefault();
             axios.post(`/auth`, {
                 login: this.login,
@@ -17,6 +17,7 @@ var sign_in = new Vue({
                 .then(function () {
                     window.location.href = "control-panel.html"
                 })
+                .catch(this.err_msg='Неверный логин или пароль')
         }
     },
 })
