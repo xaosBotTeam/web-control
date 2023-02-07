@@ -26,7 +26,17 @@ func init() {
 		log.Panicln("POSTGRES_DB is empty")
 	}
 
-	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB)
+	POSTGRES_HOST := os.Getenv("POSTGRES_HOST")
+	if POSTGRES_DB == "" {
+		log.Panicln("POSTGRES_HOST is empty")
+	}
+
+	POSTGRES_PORT := os.Getenv("POSTGRES_PORT")
+	if POSTGRES_DB == "" {
+		log.Panicln("POSTGRES_PORT is empty")
+	}
+
+	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable", POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_HOST, POSTGRES_PORT)
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
