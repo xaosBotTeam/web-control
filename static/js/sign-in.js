@@ -9,6 +9,7 @@ var sign_in = new Vue({
     },
     methods: {
         formSubmit(e) {
+            this.err_msg=''
             e.preventDefault();
             axios.post(`/auth`, {
                 login: this.login,
