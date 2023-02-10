@@ -13,20 +13,22 @@ Vue.component('account-item', {
 
     props: ['account','pID'],
 
+
+
     template:
         '<div class="col">' +
-        '   <form @submit.prevent="formSubmit">'+
+        '   <form>'+
         '       <a target="_blank" rel="noopener noreferrer" :href="account.url"><h4>{{account.friendly_name}}</h4></a>' +
         '            <div class="form-check form-switch">' +
-        '                <input class="form-check-input" type="checkbox" role="switch" v-model="account.arena_farming" id="check_arena_farming">' +
+        '                <input class="form-check-input" type="checkbox" role="switch" v-model="account.arena_farming"  @change="formSubmit">' +
         '                <label class="form-check-label" for="check_arena_farming">Слив</label>' +
         '            </div>' +
         '            <div class="form-check form-switch">' +
-        '                <input class="form-check-input" type="checkbox" role="switch" v-model="account.arena_use_energy_cans" id="arena_use_energy_cans">' +
+        '                <input class="form-check-input" type="checkbox" role="switch" v-model="account.arena_use_energy_cans" @change="formSubmit">' +
         '                <label class="form-check-label" for="arena_use_energy_cans">Использовать банки</label>' +
         '            </div>' +
         '            <div class="form-check form-switch">' +
-        '                <input class="form-check-input" type="checkbox" role="switch" v-model="account.travelling" id="travelling">' +
+        '                <input class="form-check-input" type="checkbox" role="switch" v-model="account.travelling" @change="formSubmit">' +
         '                <label class="form-check-label" for="arena_use_energy_cans">Путешествия</label>' +
         '            </div>' +
         '            <details>' +
@@ -34,9 +36,8 @@ Vue.component('account-item', {
         '               <div>game_id - {{account.game_id}}</div>' +
         '               <div>energy_limit - {{account.energy_limit}}</div>' +
         '            </details>'+
-        '       <button class="btn btn-primary">Применить</button>'+
         '   </form>'+
-        '</div>'
+        '</div>',
 })
 
 originalAccountList1 = ""
@@ -71,7 +72,6 @@ var accountList = new Vue({
         }, 2000)
     },
 })
-
 
 var addAccount = new Vue({
     el: '#addAccountForm',

@@ -51,9 +51,9 @@ func init() {
 	createSchemaString := `create schema if not exists web_control`
 	createTableString := fmt.Sprintf(`create table if not exists web_control.user_password
 (
-    id            integer not null
-        constraint id
-            primary key,
+    id                    integer not null
+        		          constraint id
+            			  primary key,
     username      text    not null,
     password_hash text    not null
 )`)
