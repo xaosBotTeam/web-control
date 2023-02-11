@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-	config_control_panel "web-control/connectors/config-control-panel"
+	configControlPanel "web-control/connectors/config-control-panel"
 	"web-control/connectors/connectors"
 )
 
@@ -33,7 +33,7 @@ func parser(body []byte) (string, bool) {
 }
 
 func updateAccountStatus() (map[string]status.Status, bool) {
-	resp, err := http.Get(config_control_panel.Configuration.GO_BOT_URL + "/status")
+	resp, err := http.Get(configControlPanel.GetBotURl() + "/status")
 	if err != nil {
 		log.Println(err)
 		return nil, true
@@ -61,7 +61,7 @@ func updateAccountStatus() (map[string]status.Status, bool) {
 }
 
 func updateAccountInformation() (map[string]account.Account, bool) {
-	resp, err := http.Get(config_control_panel.Configuration.GO_BOT_URL + "/account")
+	resp, err := http.Get(configControlPanel.GetBotURl() + "/account")
 	if err != nil {
 		log.Println(err)
 		return nil, true
@@ -89,7 +89,7 @@ func updateAccountInformation() (map[string]account.Account, bool) {
 }
 
 func updateAccountConfig() (map[string]config.Config, bool) {
-	resp, err := http.Get(config_control_panel.Configuration.GO_BOT_URL + "/config")
+	resp, err := http.Get(configControlPanel.GetBotURl() + "/config")
 	if err != nil {
 		log.Println(err)
 		return nil, true
@@ -118,17 +118,17 @@ func updateAccountConfig() (map[string]config.Config, bool) {
 
 func backgroundUpdater() {
 	for {
-		accounts := map[string]connectors.Waccount{}
+		accounts := map[string]connectors.FullAccount{}
 
-		status, err := updateAccountStatus()
+		AccountsStatus, err := updateAccountStatus()
 
 		if err {
 			time.Sleep(5 * time.Second)
 			continue
 		}
 
-		for k, v := range status {
-			accounts[k] = connectors.Waccount{Status: v}
+		for k, v := range AccountsStatus {
+			accounts[k] = connectors.FullAccount{Status: v}
 		}
 
 		inf, err := updateAccountInformation()
@@ -155,7 +155,7 @@ func backgroundUpdater() {
 					}
 				}
 
-				resAccount := map[int]connectors.Waccount{}
+				resAccount := map[int]connectors.FullAccount{}
 
 				for key, acc := range accounts {
 					intKey, err := strconv.Atoi(key)

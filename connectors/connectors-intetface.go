@@ -6,27 +6,27 @@ import (
 	"github.com/xaosBotTeam/go-shared-models/status"
 )
 
-type Waccount struct {
+type FullAccount struct {
 	account.Account
 	config.Config
 	status.Status
 }
 
-func (wacc *Waccount) AddAccount(acc account.Account) {
-	wacc.URL = acc.URL
-	wacc.Owner = acc.Owner
+func (fullAcc *FullAccount) AddAccount(acc account.Account) {
+	fullAcc.URL = acc.URL
+	fullAcc.Owner = acc.Owner
 }
 
-func (wacc *Waccount) AddConfig(conf config.Config) {
-	wacc.ArenaUseEnergyCans = conf.ArenaUseEnergyCans
-	wacc.ArenaFarming = conf.ArenaFarming
-	wacc.Travelling = conf.Travelling
+func (fullAcc *FullAccount) AddConfig(conf config.Config) {
+	fullAcc.ArenaUseEnergyCans = conf.ArenaUseEnergyCans
+	fullAcc.ArenaFarming = conf.ArenaFarming
+	fullAcc.Travelling = conf.Travelling
 }
 
-func (wacc *Waccount) AddStatus(status status.Status) {
-	wacc.FriendlyName = status.FriendlyName
-	wacc.GameID = status.GameID
-	wacc.EnergyLimit = status.EnergyLimit
+func (fullAcc *FullAccount) AddStatus(status status.Status) {
+	fullAcc.FriendlyName = status.FriendlyName
+	fullAcc.GameID = status.GameID
+	fullAcc.EnergyLimit = status.EnergyLimit
 }
 
 type Сredentials struct {
@@ -37,10 +37,10 @@ type Сredentials struct {
 type Connector interface {
 	Authorization(credential Сredentials) (int, bool)
 
-	GetAccountAllInformation() (map[int]Waccount, bool)
-	GetAccountInformation(ID int) (Waccount, bool)
+	GetAccountAllInformation() (map[int]FullAccount, bool)
+	GetAccountInformation(ID int) (FullAccount, bool)
 
-	SetAccountInformation(ID int, account Waccount) bool
+	SetAccountInformation(ID int, account FullAccount) bool
 	CreateAccount(url string)
 
 	ResetUserPassword(ID int, password string) bool

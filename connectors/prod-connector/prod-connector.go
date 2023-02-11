@@ -6,7 +6,7 @@ import (
 	"github.com/xaosBotTeam/go-shared-models/config"
 	"strconv"
 	"sync"
-	config_control_panel "web-control/connectors/config-control-panel"
+	configControlPanel "web-control/connectors/config-control-panel"
 	"web-control/connectors/connectors"
 	"web-control/connectors/connectors/prod-connector/postgres-connector"
 	sending_queue "web-control/connectors/connectors/prod-connector/sending-queue"
@@ -18,12 +18,12 @@ type ProdConnector struct {
 var accountStorage AccountStorage
 
 type AccountStorage struct {
-	accountMap map[int]connectors.Waccount
-	sync.Mutex
+	accountMap map[int]connectors.FullAccount
+	sync.RWMutex
 }
 
 func init() {
-	accountStorage.accountMap = make(map[int]connectors.Waccount)
+	accountStorage.accountMap = make(map[int]connectors.FullAccount)
 	go backgroundUpdater()
 }
 
@@ -32,31 +32,31 @@ func (connector ProdConnector) Authorization(credential connectors.Сredentials)
 	return id, resp
 }
 
-func (connector ProdConnector) GetAccountAllInformation() (map[int]connectors.Waccount, bool) {
-	accountStorage.Lock()
-	defer accountStorage.Unlock()
+func (connector ProdConnector) GetAccountAllInformation() (map[int]connectors.FullAccount, bool) {
+	accountStorage.RLock()
+	defer accountStorage.RUnlock()
 	return accountStorage.accountMap, true
 }
 
-func (connector ProdConnector) GetAccountInformation(ID int) (connectors.Waccount, bool) {
-	accountStorage.Lock()
-	defer accountStorage.Unlock()
+func (connector ProdConnector) GetAccountInformation(ID int) (connectors.FullAccount, bool) {
+	accountStorage.RLock()
+	defer accountStorage.RUnlock()
 	if _, ok := accountStorage.accountMap[ID]; ok {
 		return accountStorage.accountMap[ID], true
 	}
 
-	return connectors.Waccount{}, false
+	return connectors.FullAccount{}, false
 }
 
-func (connector ProdConnector) SetAccountInformation(ID int, account connectors.Waccount) bool {
-	accountStorage.Lock()
-	defer accountStorage.Unlock()
+func (connector ProdConnector) SetAccountInformation(ID int, account connectors.FullAccount) bool {
+	accountStorage.RLock()
+	defer accountStorage.RUnlock()
 	if _, ok := accountStorage.accountMap[ID]; ok {
 		b, err := json.Marshal(config.Config{ArenaFarming: account.ArenaFarming, ArenaUseEnergyCans: account.ArenaUseEnergyCans, Travelling: account.Travelling})
 		if err != nil {
 			return false
 		}
-		queue := sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/config/" + strconv.Itoa(ID), Methods: "PUT", Value: b}
+		queue := sending_queue.Queue_{Url: configControlPanel.GetBotURl() + "/config/" + strconv.Itoa(ID), Methods: "PUT", Value: b}
 		sending_queue.Channel <- queue
 		return true
 	}
@@ -69,10 +69,10 @@ func (connector ProdConnector) CreateAccount(url string) {
 		return
 	}
 
-	queue := sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/account/", Methods: "POST", Value: b}
+	queue := sending_queue.Queue_{Url: configControlPanel.GetBotURl() + "/account/", Methods: "POST", Value: b}
 	sending_queue.Channel <- queue
 
-	queue = sending_queue.Queue_{Url: config_control_panel.Configuration.GO_BOT_URL + "/refresh/", Methods: "PATCH", Value: nil}
+	queue = sending_queue.Queue_{Url: configControlPanel.GetBotURl() + "/refresh/", Methods: "PATCH", Value: nil}
 	sending_queue.Channel <- queue
 }
 
