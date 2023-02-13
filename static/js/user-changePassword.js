@@ -10,7 +10,6 @@ var sign_in = new Vue({
     methods: {
         formSubmit(e) {
             e.preventDefault();
-            console.log(this)
 
             if(this.new_password1!==this.new_password2){
                 this. err_msg = "Пароли не совпадают"
@@ -26,6 +25,6 @@ var sign_in = new Vue({
                     window.location.href = "sign-in.js.html"
                 }
                     console.log(error)});;
-        }
+        },
     },
 })

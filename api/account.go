@@ -34,6 +34,19 @@ func Account(app *fiber.App, store *session.Store, cn connectors.Connector) {
 		return c.JSON(account_)
 	})
 
+	api.Delete("/account/:accountID", func(c *fiber.Ctx) error {
+		ids := c.Params("accountID")
+
+		id, err := strconv.Atoi(ids)
+		if err != nil {
+			return c.Status(http.StatusBadRequest).JSON("Can't parse account id")
+		}
+
+		cn.DeleteAccount(id)
+
+		return c.JSON("ok")
+	})
+
 	api.Put("/config/:accountID", func(c *fiber.Ctx) error {
 
 		ids := c.Params("accountID")
@@ -54,9 +67,7 @@ func Account(app *fiber.App, store *session.Store, cn connectors.Connector) {
 			return c.Status(http.StatusBadRequest).JSON("Can't parse body")
 		}
 
-		account_.ArenaFarming = config.ArenaFarming
-		account_.ArenaUseEnergyCans = config.ArenaUseEnergyCans
-		account_.Travelling = config.Travelling
+		account_.AddConfig(config)
 
 		cn.SetAccountInformation(id, account_)
 		return c.JSON(account_)
