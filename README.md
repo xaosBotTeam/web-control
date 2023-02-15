@@ -17,3 +17,7 @@
 | POSTGRES_HOST      |                                | <center>  ✅ </center> | -                     |
 | POSTGRES_PORT      |                                | <center>  ✅ </center> | -                     |
 
+## API
+
+С полным описанием методов можно ознакомиться [здесь](https://editor.swagger.io/?url=https://raw.githubusercontent.com/xaosBotTeam/web-control/dev/docs/swagger.json) 
+Или после развертывания приложения перейти на /swagger/index.html

@@ -3,7 +3,6 @@ package prod_connector
 import (
 	"encoding/json"
 	"github.com/xaosBotTeam/go-shared-models/account"
-	"github.com/xaosBotTeam/go-shared-models/config"
 	"strconv"
 	"sync"
 	configControlPanel "web-control/connectors/config-control-panel"
@@ -52,7 +51,7 @@ func (connector ProdConnector) SetAccountInformation(ID int, account connectors.
 	accountStorage.RLock()
 	defer accountStorage.RUnlock()
 	if _, ok := accountStorage.accountMap[ID]; ok {
-		b, err := json.Marshal(config.Config{ArenaFarming: account.ArenaFarming, ArenaUseEnergyCans: account.ArenaUseEnergyCans, Travelling: account.Travelling})
+		b, err := json.Marshal(account.GetConfig())
 		if err != nil {
 			return false
 		}
@@ -64,6 +63,7 @@ func (connector ProdConnector) SetAccountInformation(ID int, account connectors.
 }
 
 func (connector ProdConnector) CreateAccount(url string) {
+	//TODO:implement the transfer of userid
 	b, err := json.Marshal(account.Account{Owner: 0, URL: url})
 	if err != nil {
 		return
@@ -71,9 +71,12 @@ func (connector ProdConnector) CreateAccount(url string) {
 
 	queue := sending_queue.Queue_{Url: configControlPanel.GetBotURl() + "/account/", Methods: "POST", Value: b}
 	sending_queue.Channel <- queue
+}
 
-	queue = sending_queue.Queue_{Url: configControlPanel.GetBotURl() + "/refresh/", Methods: "PATCH", Value: nil}
+func (connector ProdConnector) DeleteAccount(ID int) {
+	queue := sending_queue.Queue_{Url: configControlPanel.GetBotURl() + "/account/" + strconv.Itoa(ID), Methods: "DELETE"}
 	sending_queue.Channel <- queue
+	return
 }
 
 func (connector ProdConnector) ResetUserPassword(ID int, password string) bool {
