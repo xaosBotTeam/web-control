@@ -30,31 +30,41 @@ func CheckCoockes(store *session.Store, c *fiber.Ctx) bool {
 	return true
 }
 
-func Auth(app *fiber.App, store *session.Store, cn connectors.Connector) {
+//	@Summary		Auth
+//	@ID				auth
+//
+//	@Tags 			Auth
+//	@Produce		json
+//	@Param			account	body connectors.Сredentials true "login and password"
+//	@Router			/auth [post]
+// @Success         200  {object}  string
+// @Failure         403  {object}  string
+func (controller *abstractController) Auth(c *fiber.Ctx) error {
+	id, auth := doAuth(c, controller.cn)
+	if !auth {
+		return fiber.NewError(fiber.StatusForbidden)
+	}
 
-	app.Post("/auth", func(c *fiber.Ctx) error {
-		id, auth := doAuth(c, cn)
-		if !auth {
-			return fiber.NewError(fiber.StatusForbidden)
-		}
+	sess, _ := controller.store.Get(c)
+	sess.Set("auth", "ok")
+	sess.Set("id", id)
+	err := sess.Save()
 
-		sess, _ := store.Get(c)
-		sess.Set("auth", "ok")
-		sess.Set("id", id)
-		err := sess.Save()
+	if err != nil {
+		return fiber.NewError(fiber.StatusForbidden)
+	}
+	return c.JSON("ok")
+}
 
-		if err != nil {
-			return fiber.NewError(fiber.StatusForbidden)
-		}
-		return c.JSON("ok")
-	})
+func initAuth(app *fiber.App, controller *abstractController) {
+
+	app.Post("/auth", controller.Auth)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Redirect("/control-panel.html")
 	})
 	app.Get("*.html", func(c *fiber.Ctx) error {
-
-		if CheckCoockes(store, c) {
+		if CheckCoockes(controller.store, c) {
 			return c.Next()
 		}
 		return c.Redirect("/sign-in.htm")

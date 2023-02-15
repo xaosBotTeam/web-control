@@ -1,0 +1,231 @@
+basePath: /api/
+definitions:
+  account.Account:
+    description: Model with static info about game account
+    properties:
+      owner:
+        type: integer
+      url:
+        type: string
+    type: object
+  api.password:
+    properties:
+      password:
+        type: string
+    type: object
+  connectors.FullAccount:
+    properties:
+      arena_farming:
+        type: boolean
+      arena_use_energy_cans:
+        type: boolean
+      energy_limit:
+        type: integer
+      friendly_name:
+        type: string
+      game_id:
+        type: integer
+      open_chests:
+        type: boolean
+      owner:
+        type: integer
+      travelling:
+        type: boolean
+      url:
+        type: string
+    type: object
+  connectors.Сredentials:
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API for xaos bot web control
+  title: API for xaos bot web control
+  version: 1.0.0
+paths:
+  /account/:
+    get:
+      operationId: get-all-accounts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/connectors.FullAccount'
+            type: array
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get all game accounts
+      tags:
+      - Account
+    post:
+      operationId: add-new-game-account
+      parameters:
+      - description: account url
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/account.Account'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/account.Account'
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add new game account
+      tags:
+      - Account
+  /account/{id}:
+    delete:
+      operationId: delete-account-by-id
+      parameters:
+      - description: account id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete game account by id
+      tags:
+      - Account
+    get:
+      consumes:
+      - application/json
+      operationId: get-account
+      parameters:
+      - description: account id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/connectors.FullAccount'
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get account by id
+      tags:
+      - Account
+    put:
+      consumes:
+      - application/json
+      operationId: update-account-config
+      parameters:
+      - description: account id
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/connectors.FullAccount'
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Update account by id
+      tags:
+      - Account
+  /auth:
+    post:
+      operationId: auth
+      parameters:
+      - description: login password
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/connectors.%D0%A1redentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+      summary: Auth
+      tags:
+      - Auth
+  /resetPassword:
+    post:
+      operationId: reset-user-password
+      parameters:
+      - description: password
+        in: body
+        name: account
+        required: true
+        schema:
+          $ref: '#/definitions/api.password'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Reset User Password
+      tags:
+      - User
+swagger: "2.0"
